@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#09121b">
+<title>عبدالمجيد المرسي | دومينو</title>
+<style>
+:root{--bg:#08121b;--panel:#111f2b;--panel2:#172a38;--gold:#e7bd67;--cream:#f4e8ca;--muted:#9aabba;--green:#43c78a;--red:#e87979}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at 50% 0%,#1b3445 0,#08121b 58%);color:#f5f2e9;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;min-height:100vh}
+header{padding:18px 16px 12px;text-align:center;border-bottom:1px solid #ffffff14}
+.brand{color:var(--gold);font-size:12px;letter-spacing:2px;font-weight:800}.title{font-size:25px;font-weight:900;margin:4px 0}.sub{font-size:12px;color:var(--muted)}
+main{max-width:850px;margin:auto;padding:14px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.pill{background:#ffffff0c;border:1px solid #ffffff18;padding:8px 12px;border-radius:999px;color:var(--muted);font-size:12px}
+.scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.score{background:linear-gradient(145deg,#1a2c39,#101c27);border:1px solid #ffffff18;border-radius:15px;padding:12px;text-align:center}
+.score strong{display:block;font-size:22px;color:var(--gold)}.score span{font-size:12px;color:var(--muted)}
+.table{background:linear-gradient(145deg,#153b35,#0c2928 70%);border:5px solid #644b2d;border-radius:24px;box-shadow:0 14px 35px #0008,inset 0 0 0 2px #ffffff12;padding:14px 10px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.zone{text-align:center}.zone-label{font-size:11px;color:#c6d8cf;margin-bottom:8px}
+.opponent-hand{display:flex;justify-content:center;gap:5px;min-height:34px}
+.back{width:22px;height:34px;border-radius:5px;background:repeating-linear-gradient(45deg,#223e58,#223e58 4px,#31536e 4px,#31536e 8px);border:1px solid #8da2ae}
+.chain-wrap{display:flex;align-items:center;justify-content:center;gap:8px;min-height:75px;overflow-x:auto;padding:6px 2px}
+.chain{display:flex;align-items:center;gap:4px;direction:ltr}
+.empty{color:#b8c9bd;font-size:13px;padding:20px}
+.tile{width:52px;height:30px;display:flex;direction:ltr;background:var(--cream);border:1px solid #bba982;border-radius:5px;box-shadow:0 3px 5px #0005;flex:none;overflow:hidden}
+.tile .half{width:50%;display:grid;place-items:center;position:relative}
+.tile .half+ .half{border-left:1px solid #9b8d70}
+.dots{width:100%;height:100%;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:3px;gap:1px}
+.dot{border-radius:50%;background:#18232a;align-self:center;justify-self:center;width:5px;height:5px}
+.dot.off{visibility:hidden}
+.ends{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#d5e3d9}
+.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer}
+.primary{background:linear-gradient(135deg,#f0cf83,#c99b43);color:#17212a}.secondary{background:#ffffff12;color:#f5f2e9;border:1px solid #ffffff20}.danger{background:#512c31;color:#ffdede}
+.section{margin-top:14px;background:#101e29;border:1px solid #ffffff16;border-radius:17px;padding:13px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.section-head strong{font-size:14px}.section-head span{font-size:11px;color:var(--muted)}
+.hand{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;min-height:54px}
+.hand .tile{width:58px;height:37px;cursor:pointer;transition:transform .15s,border-color .15s}
+.hand .tile .dots{padding:4px}.hand .tile .dot{width:6px;height:6px}
+.hand .tile.selected{outline:3px solid var(--gold);transform:translateY(-5px)}
+.hint{font-size:12px;color:var(--muted);text-align:center;line-height:1.7;margin:10px 2px 0}
+.status{margin-top:12px;padding:11px;border-radius:12px;background:#ffffff0b;text-align:center;font-size:13px;color:#dce8e4;min-height:42px}
+footer{text-align:center;color:#718594;font-size:10px;padding:16px}
+@media(min-width:600px){.table{min-height:290px;padding:20px}.tile{width:58px;height:34px}.chain{gap:6px}}
+</style>
+</head>
+<body>
+<header><div class="brand">OFFLINE GAME • DOMINO</div><div class="title">عبدالمجيد المرسي</div><div class="sub">لعبة الدومينو • نسخة تجريبية تعمل بدون إنترنت</div></header>
+<main>
+ <div class="topbar"><span class="pill" id="turn">دورك</span><span class="pill" id="remaining">السحب: 14 حجر</span><span class="pill">دومينو ٦×٦</span></div>
+ <div class="scoreboard">
+  <div class="score"><strong id="youCount">7</strong><span>أحجارك المتبقية</span></div>
+  <div class="score"><strong id="cpuCount">7</strong><span>أحجار الكمبيوتر</span></div>
+ </div>
+ <section class="table">
+  <div class="zone"><div class="zone-label">الكمبيوتر</div><div class="opponent-hand" id="opponentBacks"></div></div>
+  <div class="chain-wrap"><div class="chain" id="chain"><div class="empty">ابدأ الجولة بوضع أول حجر</div></div></div>
+  <div class="ends"><span id="leftEnd">الطرف الأيسر: —</span><span id="rightEnd">الطرف الأيمن: —</span></div>
+  <div class="zone"><div class="zone-label">منطقة اللعب</div></div>
+ </section>
+ <div class="controls" style="margin-top:12px">
+  <button class="primary" id="drawBtn">اسحب حجرًا</button>
+  <button class="secondary" id="passBtn">تمرير الدور</button>
+  <button class="secondary" id="newBtn">جولة جديدة</button>
+ </div>
+ <section class="section">
+  <div class="section-head"><strong>أحجارك</strong><span id="handLabel">اختر حجرًا للعب</span></div>
+  <div class="hand" id="playerHand"></div>
+  <div class="hint">اضغط على حجر من أحجارك لتحديده، ثم اختر الطرف الأيسر أو الأيمن لوضعه. إذا لم يكن لديك حجر مناسب يمكنك السحب.</div>
+  <div class="controls" style="margin-top:12px">
+   <button class="primary" id="leftBtn" disabled>ضع على اليسار</button>
+   <button class="primary" id="rightBtn" disabled>ضع على اليمين</button>
+  </div>
+ </section>
+ <div class="status" id="status">اضغط «جولة جديدة» لبدء اللعب.</div>
+</main>
+<footer>عبدالمجيد المرسي • إصدار تجريبي أولي</footer>
+<script>
+const $=id=>document.getElementById(id);
+let player=[],cpu=[],boneyard=[],chain=[],selected=-1,turn='player',blocked=false,gameOver=false;
+const pipLayouts={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function tileEl(a,b,extra=''){const el=document.createElement('div');el.className='tile '+extra;el.append(makeHalf(a),makeHalf(b));return el}
+function makeHalf(n){const h=document.createElement('div');h.className='half';const d=document.createElement('div');d.className='dots';for(let i=0;i<9;i++){const dot=document.createElement('i');dot.className='dot'+(pipLayouts[n].includes(i)?'':' off');d.append(dot)}h.append(d);return h}
+function makeSet(){let s=[];for(let a=0;a<=6;a++)for(let b=a;b<=6;b++)s.push([a,b]);return s}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function say(t){$('status').textContent=t}
+function start(){let set=shuffle(makeSet());player=set.splice(0,7);cpu=set.splice(0,7);boneyard=set;chain=[];selected=-1;turn='player';blocked=false;gameOver=false;say('بدأت الجولة! اختر حجرًا لبدء اللعب.');render()}
+function render(){
+ $('youCount').textContent=player.length;$('cpuCount').textContent=cpu.length;$('remaining').textContent='السحب: '+boneyard.length+' حجر';$('turn').textContent=gameOver?'انتهت الجولة':turn==='player'?'دورك':'دور الكمبيوتر';
+ $('opponentBacks').innerHTML='';for(let i=0;i<cpu.length;i++){let b=document.createElement('i');b.className='back';$('opponentBacks').append(b)}
+ const ch=$('chain');ch.innerHTML='';if(!chain.length){ch.innerHTML='<div class="empty">ابدأ الجولة بوضع أول حجر</div>'}else chain.forEach(t=>ch.append(tileEl(t[0],t[1])));
+ $('leftEnd').textContent='الطرف الأيسر: '+(chain.length?chain[0][0]:'—');$('rightEnd').textContent='الطرف الأيمن: '+(chain.length?chain[chain.length-1][1]:'—');
+ const ph=$('playerHand');ph.innerHTML='';player.forEach((t,i)=>{let e=tileEl(t[0],t[1],i===selected?'selected':'');e.onclick=()=>{if(turn!=='player'||gameOver)return;selected=i;render()};ph.append(e)});
+ $('handLabel').textContent=selected>=0?'الحجر المحدد: '+player[selected].join(' | '):'اختر حجرًا للعب';
+ $('leftBtn').disabled=selected<0||turn!=='player'||gameOver||!canPlace(player[selected],'left');
+ $('rightBtn').disabled=selected<0||turn!=='player'||gameOver||!canPlace(player[selected],'right');
+ $('drawBtn').disabled=turn!=='player'||gameOver||!boneyard.length;
+ $('passBtn').disabled=turn!=='player'||gameOver;
+}
+function canPlace(t,side){if(!chain.length)return true;let v=side==='left'?chain[0][0]:chain[chain.length-1][1];return t.includes(v)}
+function place(index,side){if(turn!=='player'||gameOver||!player[index]||!canPlace(player[index],side))return;let t=player.splice(index,1)[0];if(!chain.length)chain.push(t);else if(side==='left'){if(t[1]===chain[0][0])chain.unshift(t);else chain.unshift([t[1],t[0]])}else{if(t[0]===chain[chain.length-1][1])chain.push(t);else chain.push([t[1],t[0]])}selected=-1;afterMove('player')}
+function afterMove(who){if(!player.length||!cpu.length){gameOver=true;let winner=player.length===0?'أنت':'الكمبيوتر';say(winner+' فاز بالجولة!');render();return}if(!boneyard.length&&!hasMove(player)&&!hasMove(cpu)){gameOver=true;let p=player.reduce((s,t)=>s+t[0]+t[1],0),c=cpu.reduce((s,t)=>s+t[0]+t[1],0);say(p<c?'الجولة لك! مجموع أحجارك أقل.':p>c?'الكمبيوتر فاز! مجموع أحجاره أقل.':'تعادل!');render();return}turn=who==='player'?'cpu':'player';render();if(turn==='cpu')setTimeout(cpuMove,700)}
+function hasMove(hand){if(!chain.length)return hand.length>0;return hand.some(t=>canPlace(t,'left')||canPlace(t,'right'))}
+function draw(){if(turn!=='player'||gameOver)return;if(!boneyard.length){say('لا توجد أحجار للسحب. يمكنك تمرير الدور إذا لم يكن لديك لعب.');return}player.push(boneyard.pop());selected=player.length-1;say('سحبت حجرًا جديدًا.');render();if(!hasMove(player)&&!boneyard.length)say('لا يوجد حجر مناسب؛ يمكنك تمرير الدور.')}
+function pass(){if(turn!=='player'||gameOver)return;if(hasMove(player)){say('لديك حجر يمكن لعبه؛ لا يمكنك تمرير الدور الآن.');return}if(boneyard.length){say('اسحب حجرًا أولًا ما دام السحب متاحًا.');return}say('مررت الدور.');selected=-1;afterMove('player')}
+function cpuMove(){if(gameOver||turn!=='cpu')return;let options=[];cpu.forEach((t,i)=>{for(let side of ['left','right'])if(canPlace(t,side))options.push({i,side,score:t[0]+t[1]})});if(options.length){options.sort((a,b)=>b.score-a.score);let m=options[0];let t=cpu.splice(m.i,1)[0];if(!chain.length)chain.push(t);else if(m.side==='left'){if(t[1]===chain[0][0])chain.unshift(t);else chain.unshift([t[1],t[0]])}else{if(t[0]===chain[chain.length-1][1])chain.push(t);else chain.push([t[1],t[0]])}say('الكمبيوتر لعب حجرًا.');afterMove('cpu');return}if(boneyard.length){cpu.push(boneyard.pop());say('الكمبيوتر يسحب حجرًا...');render();setTimeout(cpuMove,500);return}say('الكمبيوتر مرر الدور.');turn='player';render()}
+$('leftBtn').onclick=()=>place(selected,'left');$('rightBtn').onclick=()=>place(selected,'right');$('drawBtn').onclick=draw;$('passBtn').onclick=pass;$('newBtn').onclick=start;
+render();
+</script>
+</body>
+</html>
